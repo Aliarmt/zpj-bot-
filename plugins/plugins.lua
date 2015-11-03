@@ -197,16 +197,16 @@ end
 return {
   description = "Plugin to manage other plugins. Enable, disable or reload.", 
   usage = {
-      moderator = {
-          "!plugins disable [plugin] chat : disable plugin only this chat.",
-          "!plugins enable [plugin] chat : enable plugin only this chat.",
-          },
-      sudo = {
-          "!plugins : list all plugins.",
-          "!plugins enable [plugin] : enable plugin.",
-          "!plugins disable [plugin] : disable plugin.",
-          "!plugins reload : reloads all plugins." },
-          },
+    moderator = {
+      "!plugins disable [plugin] chat : disable plugin only this chat.",
+      "!plugins enable [plugin] chat : enable plugin only this chat.",
+      },
+    sudo = {
+      "!plugins : list all plugins.",
+      "!plugins enable [plugin] : enable plugin.",
+      "!plugins disable [plugin] : disable plugin.",
+      "!plugins reload : reloads all plugins." },
+    },
   patterns = {
     "^!plugins$",
     "^!plugins? (enable) ([%w_%.%-]+)$",

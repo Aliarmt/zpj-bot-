@@ -9,7 +9,7 @@ VERSION = '0.14.6'
 -- This function is called when tg receive a msg
 function on_msg_receive (msg)
   if not started then
-    return
+return
   end
 
   local receiver = get_receiver(msg)
@@ -88,20 +88,20 @@ end
 
 --
 function pre_process_service_msg(msg)
-   if msg.service then
-      local action = msg.action or {type=""}
-      -- Double ! to discriminate of normal actions
-      msg.text = "!!tgservice " .. action.type
+  if msg.service then
+    local action = msg.action or {type=""}
+    -- Double ! to discriminate of normal actions
+    msg.text = "!!tgservice " .. action.type
 
-      -- wipe the data to allow the bot to read service messages
-      if msg.out then
-         msg.out = false
-      end
-      if msg.from.id == our_id then
-         msg.from.id = 0
-      end
-   end
-   return msg
+    -- wipe the data to allow the bot to read service messages
+    if msg.out then
+      msg.out = false
+    end
+    if msg.from.id == our_id then
+      msg.from.id = 0
+    end
+  end
+  return msg
 end
 
 -- Apply plugin.pre_process function
@@ -112,7 +112,6 @@ function pre_process_msg(msg)
       msg = plugin.pre_process(msg)
     end
   end
-
   return msg
 end
 
@@ -132,11 +131,11 @@ local function is_plugin_disabled_on_chat(plugin_name, receiver)
     for disabled_plugin,disabled in pairs(disabled_chats[receiver]) do
       if disabled_plugin == plugin_name and disabled then
         if plugins[disabled_plugin].hidden then
-            print('Plugin '..disabled_plugin..' is disabled on this chat')
+          print('Plugin '..disabled_plugin..' is disabled on this chat')
         else
-            local warning = 'Plugin '..disabled_plugin..' is disabled on this chat'
-            print(warning)
-            send_msg(receiver, warning, ok_cb, false)
+          local warning = 'Plugin '..disabled_plugin..' is disabled on this chat'
+          print(warning)
+          send_msg(receiver, warning, ok_cb, false)
         end
         return true
       end
@@ -206,30 +205,20 @@ end
 function create_config( )
   -- A simple config with basic plugins and ourselves as privileged user
   config = {
-    enabled_plugins = {
-      "echo",
-      "get",
-      "google",
-      "groupmanager",
-      "help",
-      "id",
-      "images",
-      "img_google",
-      "location",
-      "media",
-      "plugins",
-      "channels",
-      "set",
-      "stats",
-      "time",
-      "version",
-      "weather",
-      "youtube",
-      "media_handler",
-      "moderation"},
-    sudo_users = {our_id},
-    disabled_channels = {},
-    moderation = {data = 'data/moderation.json'}
+  enabled_plugins = {
+  "banhammer",
+  "channels",
+  "groupmanager",
+  "help",
+  "id",
+  "invite",
+  "moderation",
+  "plugins",
+  "stats",
+  "version"},
+  sudo_users = {our_id},
+  disabled_channels = {},
+  moderation = {data = 'data/moderation.json'}
   }
   serialize_to_file(config, './data/config.lua')
   print ('saved config into ./data/config.lua')
@@ -258,17 +247,14 @@ end
 function load_plugins()
   for k, v in pairs(_config.enabled_plugins) do
     print("Loading plugin", v)
-
     local ok, err =  pcall(function()
       local t = loadfile("plugins/"..v..'.lua')()
       plugins[v] = t
-    end)
-
+      end)
     if not ok then
       print('\27[31mError loading plugin '..v..'\27[39m')
       print('\27[31m'..err..'\27[39m')
     end
-
   end
 end
 
@@ -284,7 +270,6 @@ function load_data(filename)
 	local data = JSON.decode(s)
 
 	return data
-
 end
 
 function save_data(filename, data)

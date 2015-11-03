@@ -48,10 +48,10 @@ local function chat_stats(chat_id)
 
   -- Sort users by msgs number
   table.sort(users_info, function(a, b) 
-      if a.msgs and b.msgs then
-        return a.msgs > b.msgs
-      end
-    end)
+    if a.msgs and b.msgs then
+      return a.msgs > b.msgs
+    end
+  end)
 
   local text = ''
   for k,user in pairs(users_info) do

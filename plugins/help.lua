@@ -1,19 +1,19 @@
 do
- 
+
 function pairsByKeys(t, f)
-      local a = {}
-      for n in pairs(t) do table.insert(a, n) end
-      table.sort(a, f)
-      local i = 0      -- iterator variable
-      local iter = function ()   -- iterator function
-        i = i + 1
-        if a[i] == nil then return nil
-        else return a[i], t[a[i]]
-        end
-      end
-      return iter
+  local a = {}
+  for n in pairs(t) do table.insert(a, n) end
+  table.sort(a, f)
+  local i = 0      -- iterator variable
+  local iter = function ()   -- iterator function
+    i = i + 1
+    if a[i] == nil then return nil
+      else return a[i], t[a[i]]
     end
- 
+  end
+  return iter
+end
+
 -- Returns true if is not empty
 local function has_usage_data(dict)
   if (dict.usage == nil or dict.usage == '') then
@@ -21,7 +21,7 @@ local function has_usage_data(dict)
   end
   return true
 end
- 
+
 -- Get commands for that plugin
 local function plugin_help(name,number,requester)
   local plugin = ""
@@ -41,60 +41,61 @@ local function plugin_help(name,number,requester)
     plugin = plugins[name]
     if not plugin then return nil end
   end
- 
-    local text = ""
-    if (type(plugin.usage) == "table") then
-      for ku,usage in pairs(plugin.usage) do
-          if ku == 'user' then -- usage for user
-              if (type(plugin.usage.user) == "table") then
-                  for k,v in pairs(plugin.usage.user) do
-                      text = text..v..'\n'
-                  end
-              elseif has_usage_data(plugin) then -- Is not empty
-                  text = text..plugin.usage.user..'\n'
-              end
-          elseif ku == 'moderator' then -- usage for moderator
-              if requester == 'moderator' or requester == 'admin' or requester == 'sudo' then
-                  if (type(plugin.usage.moderator) == "table") then
-                      for k,v in pairs(plugin.usage.moderator) do
-                          text = text..v..'\n'
-                      end
-                  elseif has_usage_data(plugin) then -- Is not empty
-                      text = text..plugin.usage.moderator..'\n'
-                  end
-              end
-          elseif ku == 'admin' then -- usage for admin
-              if requester == 'admin' or requester == 'sudo' then
-                  if (type(plugin.usage.admin) == "table") then
-                      for k,v in pairs(plugin.usage.admin) do
-                          text = text..v..'\n'
-                      end
-                  elseif has_usage_data(plugin) then -- Is not empty
-                      text = text..plugin.usage.admin..'\n'
-                  end
-              end
-          elseif ku == 'sudo' then -- usage for sudo
-              if requester == 'sudo' then
-                  if (type(plugin.usage.sudo) == "table") then
-                      for k,v in pairs(plugin.usage.sudo) do
-                          text = text..v..'\n'
-                      end
-                  elseif has_usage_data(plugin) then -- Is not empty
-                      text = text..plugin.usage.sudo..'\n'
-                  end
-              end
-          else
-              text = text..usage..'\n'
+
+  local text = ""
+  if (type(plugin.usage) == "table") then
+    for ku,usage in pairs(plugin.usage) do
+      if ku == 'user' then -- usage for user
+        if (type(plugin.usage.user) == "table") then
+          for k,v in pairs(plugin.usage.user) do
+            text = text..v..'\n'
           end
+        elseif has_usage_data(plugin) then -- Is not empty
+          text = text..plugin.usage.user..'\n'
+        end
+        elseif ku == 'moderator' then -- usage for moderator
+          if requester == 'moderator' or requester == 'admin' or requester == 'sudo' then
+            if (type(plugin.usage.moderator) == "table") then
+              for k,v in pairs(plugin.usage.moderator) do
+                text = text..v..'\n'
+              end
+            elseif has_usage_data(plugin) then -- Is not empty
+              text = text..plugin.usage.moderator..'\n'
+            end
+          end
+        elseif ku == 'admin' then -- usage for admin
+          if requester == 'admin' or requester == 'sudo' then
+            if (type(plugin.usage.admin) == "table") then
+              for k,v in pairs(plugin.usage.admin) do
+                text = text..v..'\n'
+              end
+            elseif has_usage_data(plugin) then -- Is not empty
+              text = text..plugin.usage.admin..'\n'
+            end
+          end
+        elseif ku == 'sudo' then -- usage for sudo
+          if requester == 'sudo' then
+            if (type(plugin.usage.sudo) == "table") then
+              for k,v in pairs(plugin.usage.sudo) do
+                text = text..v..'\n'
+              end
+            elseif has_usage_data(plugin) then -- Is not empty
+              text = text..plugin.usage.sudo..'\n'
+            end
+          end
+        else
+          text = text..usage..'\n'
+        end
       end
-      text = text..'======================\n'
-    elseif has_usage_data(plugin) then -- Is not empty
-      text = text..plugin.usage..'\n======================\n'
-    end
-    return text
+    text = text..''
+  elseif has_usage_data(plugin) then -- Is not empty
+    text = text..plugin.usage..''
+  end
+
+  return text
 end
- 
- 
+
+
 -- !help command
 local function telegram_help()
   local i = 0
@@ -113,8 +114,8 @@ local function telegram_help()
   text = text..'\n'..'Or "!help all" to show all info.'
   return text
 end
- 
- 
+
+
 -- !help all command
 local function help_all(requester)
   local ret = ""
@@ -127,7 +128,7 @@ local function help_all(requester)
   end
   return ret
 end
- 
+
 local function run(msg, matches)
   if is_sudo(msg) then
       requester = "sudo"
@@ -155,7 +156,7 @@ local function run(msg, matches)
     return text
   end
 end
- 
+
 return {
   description = "Help plugin. Get info from other plugins.  ",
   usage = {
@@ -171,5 +172,5 @@ return {
   },
   run = run
 }
- 
+
 end

@@ -1,5 +1,3 @@
-do
-
 local function check_member(cb_extra, success, result)
    local receiver = cb_extra.receiver
    local data = cb_extra.data
@@ -227,14 +225,14 @@ function run(msg, matches)
     return modrem(msg)
   end
   if matches[1] == 'promote' and matches[2] then
-    if not is_momod(msg) then
+    if not is_mod(msg) then
         return "Only moderator can promote"
     end
   local member = string.gsub(matches[2], "@", "")
     chat_info(receiver, username_id, {mod_cmd= mod_cmd, receiver=receiver, member=member})
   end
   if matches[1] == 'demote' and matches[2] then
-    if not is_momod(msg) then
+    if not is_mod(msg) then
         return "Only moderator can demote"
     end
     if string.gsub(matches[2], "@", "") == msg.from.username then
@@ -305,5 +303,3 @@ return {
   }, 
   run = run,
 }
-
-end
