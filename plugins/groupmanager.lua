@@ -215,29 +215,74 @@ local function is_anti_spam(msg)
 end
 
 local function pre_process(msg)
-  local hash = 'floodc:'..msg.from.id..':'..msg.to.id
+  -- media handler
+  if not msg.text and msg.media then
+    msg.text = '['..msg.media.type..']'
+  end
+
+  --vardump(msg)
+  if msg.action and msg.action.type then
+    local action = msg.action.type
+    local receiver = get_receiver(msg)
+    local data = load_data(_config.moderation.data)
+    if data[tostring(msg.to.id)] then
+      local settings = data[tostring(msg.to.id)]['settings']
+      if action == 'chat_rename' then
+        local group_name_set = settings.set_name
+        local group_name_lock = settings.lock_name
+        local to_rename = 'chat#id'..msg.to.id
+        if group_name_lock == 'yes' then
+          if group_name_set ~= tostring(msg.to.print_name) then
+            rename_chat(to_rename, group_name_set, ok_cb, false)
+          end
+        elseif group_name_lock == 'no' then
+          return nil
+        end
+      end
+      if action == 'chat_add_user' or action == 'chat_add_user_link' then
+        if msg.action.link_issuer then
+          user_id = 'user#id'..msg.from.id
+        else
+          user_id = 'user#id'..msg.action.user.id
+        end
+        if action == 'chat_add_user' and msg.action.user.flags == 4352 and msg.from.id ~= 0 then -- Anti Bot !! to prevent Spammers
+          chat_del_user(receiver, user_id, ok_cb, true)
+        end
+        local group_member_lock = settings.lock_member
+        if group_member_lock == 'yes' and msg.from.id ~= 0 then
+          chat_del_user(receiver, user_id, ok_cb, true)
+        end
+      end
+      if action == 'chat_delete_photo' then
+        local group_photo_lock = settings.lock_photo
+        if group_photo_lock == 'yes' then
+          chat_set_photo(receiver, settings.set_photo, ok_cb, false)
+        end
+      end
+      if action == 'chat_change_photo' and msg.from.id ~= 0 then
+        local group_photo_lock = settings.lock_photo
+        if group_photo_lock == 'yes' then
+          chat_set_photo(receiver, settings.set_photo, ok_cb, false)
+        end
+      end
+      return msg
+    end
+  end
+	local hash = 'floodc:'..msg.from.id..':'..msg.to.id
     redis:incr(hash)
 	if msg.from.type == 'user' then
     local hash = 'user:'..msg.from.id..':floodc'
     local msgs = tonumber(redis:get(hash) or 0)
     if msgs > NUM_MSG_MAX then
-      if is_anti_spam(msg) and not is_mod(msg) then
+      if is_anti_spam(msg) and not is_momod(msg) then
         send_large_msg(get_receiver(msg), 'Don\'t spam!')
         chat_del_user(receiver, 'user#id'..msg.from.id, ok_cb, true)
         msg = nil
       end
     end
     redis:setex(hash, TIME_CHECK, msgs+1)
-	end
-	return msg
-end
-
--- media handler
-local function pre_process(msg)
-  if not msg.text and msg.media then
-    msg.text = '['..msg.media.type..']'
   end
-  return msg
+	return msg
 end
 
 function run(msg, matches)
@@ -413,18 +458,22 @@ end
 return {
   description = "Plugin to manage group chat.",
   usage = {
-  "!group create <group_name> : Create a new group (admin only)",
-  "!group set about <description> : Set group description",
-  "!group about : Read group description",
-  "!group set rules <rules> : Set group rules",
-  "!group rules : Read group rules",
-  "!group set name <new_name> : Set group name",
-  "!group set photo : Set group photo",
-  "!group <lock|unlock> name : Lock/unlock group name",
-  "!group <lock|unlock> photo : Lock/unlock group photo",
-  "!group <lock|unlock> member : Lock/unlock group member",
-  "!group <lock|unlock> spam : Enable/disable spam protection",
-  "!group settings : Show group settings"
+    user = {
+    "!group about : Read group description",
+    "!group rules : Read group rules",
+    },
+    moderator = {
+    "!group create <group_name> : Create a new group (admin only)",
+    "!group set about <description> : Set group description",
+    "!group set rules <rules> : Set group rules",
+    "!group set name <new_name> : Set group name",
+    "!group set photo : Set group photo",
+    "!group <lock|unlock> name : Lock/unlock group name",
+    "!group <lock|unlock> photo : Lock/unlock group photo",
+    "!group <lock|unlock> member : Lock/unlock group member",
+    "!group <lock|unlock> spam : Enable/disable spam protection",
+    "!group settings : Show group settings"
+    },
   },
   patterns = {
   "^!(group) (create) (.*)$",
