@@ -1,6 +1,6 @@
 # <p align="center">merbot
 
-<p align="center">A Telegram Bot based on plugins using [tg](https://github.com/vysheng/tg).
+<p align="center">A Telegram Group Peace Keeper Bot
 
 Bot Commands
 ------------
