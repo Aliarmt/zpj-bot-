@@ -1,5 +1,10 @@
 -- data saved to moderation.json
 -- check moderation plugin
+
+-- make sure to set with value that not higher than stats.lua
+local NUM_MSG_MAX = 4
+local TIME_CHECK = 4 -- seconds
+
 local function create_group(msg)
   -- superuser and admins only (because sudo are always has privilege)
   if not is_admin(msg) then
@@ -170,6 +175,63 @@ local function show_group_settings(msg, data)
   return text
 end
 
+--lock/unlock spam protection
+local function lock_group_spam(msg, data)
+  if not is_mod(msg) then
+    return "For moderators only!"
+  end
+    local group_spam_lock = data[tostring(msg.to.id)]['settings']['lock_spam']
+  if group_spam_lock == 'yes' then
+    return 'Spam protection already enabled'
+  else
+    data[tostring(msg.to.id)]['settings']['lock_spam'] = 'yes'
+    save_data(_config.moderation.data, data)
+  end
+  return 'Spam protection has been enabled'
+end
+
+local function unlock_group_spam(msg, data)
+  if not is_mod(msg) then
+    return "For moderators only!"
+  end
+  local group_spam_lock = data[tostring(msg.to.id)]['settings']['lock_spam']
+	if group_spam_lock == 'no' then
+    return 'Spam protection is not enabled'
+	else
+    data[tostring(msg.to.id)]['settings']['lock_spam'] = 'no'
+    save_data(_config.moderation.data, data)
+	return 'Spam protection has been disabled'
+	end
+end
+
+local function is_anti_spam(msg)
+	local data = load_data(_config.moderation.data)
+	local group_spam_lock = data[tostring(msg.to.id)]['settings']['lock_spam']
+	if group_spam_lock == 'yes' then
+    return true
+	else
+		return false
+	end
+end
+
+local function pre_process(msg)
+  local hash = 'floodc:'..msg.from.id..':'..msg.to.id
+    redis:incr(hash)
+	if msg.from.type == 'user' then
+    local hash = 'user:'..msg.from.id..':floodc'
+    local msgs = tonumber(redis:get(hash) or 0)
+    if msgs > NUM_MSG_MAX then
+      if is_anti_spam(msg) and not is_mod(msg) then
+        send_large_msg(get_receiver(msg), 'Don\'t spam!')
+        chat_del_user(receiver, 'user#id'..msg.from.id, ok_cb, true)
+        msg = nil
+      end
+    end
+    redis:setex(hash, TIME_CHECK, msgs+1)
+	end
+	return msg
+end
+
 -- media handler
 local function pre_process(msg)
   if not msg.text and msg.media then
@@ -265,6 +327,9 @@ function run(msg, matches)
       end
       if matches[3] == 'photo' then
         return lock_group_photo(msg, data)
+      end   
+      if matches[3] == 'spam' then
+        return lock_group_spam(msg, data)
       end
     end
 
@@ -278,6 +343,9 @@ function run(msg, matches)
       end
       if matches[3] == 'photo' then
         return unlock_group_photo(msg, data)
+      end      
+      if matches[3] == 'spam' then
+        return unlock_group_spam(msg, data)
       end
     end
 
@@ -355,6 +423,7 @@ return {
   "!group <lock|unlock> name : Lock/unlock group name",
   "!group <lock|unlock> photo : Lock/unlock group photo",
   "!group <lock|unlock> member : Lock/unlock group member",
+  "!group <lock|unlock> spam : Enable/disable spam protection",
   "!group settings : Show group settings"
   },
   patterns = {
