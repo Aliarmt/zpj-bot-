@@ -1,7 +1,11 @@
 #!/usr/bin/env bash
 
+# VARIABLES --------------------------------------------------------------------
+
 THIS_DIR="${0%/*}"
 cd $THIS_DIR
+
+# FUNCTIONS --------------------------------------------------------------------
 
 update() {
   git pull
@@ -19,13 +23,17 @@ install_luarocks() {
 
   ./configure --prefix=$PREFIX --sysconfdir=$PREFIX/luarocks --force-config
 
-  RET=$?; if [ $RET -ne 0 ];
-    then echo "Error. Exiting."; exit $RET;
+  RET=$?
+  if [ $RET -ne 0 ]; then
+    printf "%s\n" "Error. Exiting."
+    exit $RET
   fi
 
   make build && make install
-  RET=$?; if [ $RET -ne 0 ];
-    then echo "Error. Exiting.";exit $RET;
+  RET=$?
+  if [ $RET -ne 0 ]; then
+    printf "%s\n" "Error. Exiting."
+    exit $RET
   fi
 
   cd ..
@@ -34,43 +42,59 @@ install_luarocks() {
 
 install_rocks() {
   ./.luarocks/bin/luarocks install luasocket
-  RET=$?; if [ $RET -ne 0 ];
-    then echo "Error. Exiting."; exit $RET;
+  RET=$?
+  if [ $RET -ne 0 ]; then
+    printf "%s\n" "Error. Exiting."
+    exit $RET
   fi
 
   ./.luarocks/bin/luarocks install oauth
-  RET=$?; if [ $RET -ne 0 ];
-    then echo "Error. Exiting."; exit $RET;
+  RET=$?
+  if [ $RET -ne 0 ]; then
+    printf "%s\n" "Error. Exiting."
+    exit $RET
   fi
 
   ./.luarocks/bin/luarocks install redis-lua
-  RET=$?; if [ $RET -ne 0 ];
-    then echo "Error. Exiting."; exit $RET;
+  RET=$?
+  if [ $RET -ne 0 ]; then
+    printf "%s\n" "Error. Exiting."
+    exit $RET
   fi
 
   ./.luarocks/bin/luarocks install lua-cjson
-  RET=$?; if [ $RET -ne 0 ];
-    then echo "Error. Exiting."; exit $RET;
+  RET=$?
+  if [ $RET -ne 0 ]; then
+    printf "%s\n" "Error. Exiting."
+    exit $RET
   fi
 
   ./.luarocks/bin/luarocks install fakeredis
-  RET=$?; if [ $RET -ne 0 ];
-    then echo "Error. Exiting."; exit $RET;
+  RET=$?
+  if [ $RET -ne 0 ]; then
+    printf "%s\n" "Error. Exiting."
+    exit $RET
   fi
 
   ./.luarocks/bin/luarocks install xml
-  RET=$?; if [ $RET -ne 0 ];
-    then echo "Error. Exiting."; exit $RET;
+  RET=$?
+  if [ $RET -ne 0 ]; then
+    printf "%s\n" "Error. Exiting."
+    exit $RET
   fi
 
   ./.luarocks/bin/luarocks install feedparser
-  RET=$?; if [ $RET -ne 0 ];
-    then echo "Error. Exiting."; exit $RET;
+  RET=$?
+  if [ $RET -ne 0 ]; then
+    printf "%s\n" "Error. Exiting."
+    exit $RET
   fi
 
   ./.luarocks/bin/luarocks install serpent
-  RET=$?; if [ $RET -ne 0 ];
-    then echo "Error. Exiting."; exit $RET;
+  RET=$?
+  if [ $RET -ne 0 ]; then
+    printf "%s\n" "Error. Exiting."
+    exit $RET
   fi
 }
 
@@ -86,12 +110,15 @@ install() {
   ./configure --enable-liblua --enable-json --disable-python && make
 
   RET=$?; if [ $RET -ne 0 ]; then
-    echo "Error. Exiting."; exit $RET;
+    printf "%s\n" "Error. Exiting."
+    exit $RET
   fi
   cd ..
   install_luarocks
   install_rocks
 }
+
+# MAIN -------------------------------------------------------------------------
 
 if [ "$1" = "install" ]; then
   install
@@ -99,14 +126,14 @@ elif [ "$1" = "update" ]; then
   update
 else
   if [ ! -f ./tg/telegram.h ]; then
-    echo "tg not found"
-    echo "Run $0 install"
+    printf "%s\n" "tg not found"
+    printf "%s\n" "Run $0 install"
     exit 1
   fi
 
   if [ ! -f ./tg/bin/telegram-cli ]; then
-    echo "tg binary not found"
-    echo "Run $0 install"
+    printf "%s\n" "tg binary not found"
+    printf "%s\n" "Run $0 install"
     exit 1
   fi
 

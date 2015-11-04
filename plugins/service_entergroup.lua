@@ -58,8 +58,8 @@ local function description_rules(msg, user_name)
       rules = data[tostring(msg.to.id)]["rules"]
       rules = "\nRules :\n"..rules.."\n"
     end
-    local sambutan = "You are in group '"..string.gsub(msg.to.print_name, "_", " ").."'\n"
-    local text = sambutan..about..rules.."\n"
+    local welcome = "You are in group '"..string.gsub(msg.to.print_name, "_", " ").."'\n"
+    local text = welcome..about..rules.."\n"
     local text = text.."Please welcome "..user_name
     local receiver = get_receiver(msg)
     send_large_msg(receiver, text, ok_cb, false)
