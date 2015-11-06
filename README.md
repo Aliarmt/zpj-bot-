@@ -33,8 +33,10 @@ Bot Commands
     </tr>
     <tr>
       <td>channels.lua</td>
-      <td>Plugin to manage channels. Enable or disable channel.</td>
-      <td><code>!channel enable </code>: enable current channel<br><code>!channel disable </code>: disable current channel<br></td>
+      <td>Plugin to manage channels.<br>
+          Enable or disable channel.</td>
+      <td><code>!channel enable </code>: enable current channel<br>
+          <code>!channel disable </code>: disable current channel<br></td>
     </tr>
     <tr>
       <td>groupmanager.lua</td>
@@ -49,22 +51,28 @@ Bot Commands
           <code>!group &lt;lock|unlock&gt; name </code>: Lock/unlock group name<br>
           <code>!group &lt;lock|unlock&gt; photo </code>: Lock/unlock group photo<br>
           <code>!group &lt;lock|unlock&gt; member </code>: Lock/unlock group member<br>
+          <code>!group &lt;lock|unlock&gt; spam </code>: Enable/disable spam protection<br>
           <code>!group settings </code>: Show group settings<br></td>
     </tr>
     <tr>
       <td>help.lua</td>
-      <td>Help plugin. Get info from other plugins. </td>
-      <td><code>!help </code>: Show list of plugins.<br><code>!help all </code>: Show all commands for every plugin.<br><code>!help [plugin name] </code>: Commands for that plugin.<br></td>
+      <td>Help plugin.<br>
+          Get info from other plugins.</td>
+      <td><code>!help </code>: Show list of plugins.<br>
+          <code>!help all </code>: Show all commands for every plugin.<br>
+          <code>!help [plugin name] </code>: Commands for that plugin.<br></td>
     </tr>
     <tr>
         <td>id.lua</td>
         <td>Know your id or the id of a chat members.</td>
-        <td><code>!id </code>: Return your ID and the chat id if you are in one.<br><code>!id(s) chat </code>: Return the IDs of the chat members.<br></td>
+        <td><code>!id </code>: Return your ID and the chat id if you are in one.<br>
+            <code>!id(s) chat </code>: Return the IDs of the chat members.<br></td>
     </tr>
     <tr>
       <td>invite.lua</td>
       <td>Invite other user to the chat group</td>
-      <td><code>!invite name [user_name]<br><code>!invite id [user_id]</code><br></td>
+      <td><code>!invite name [user_name]</code><br>
+          <code>!invite id [user_id]</code><br></td>
     </tr>
     <tr>
       <td>moderation.lua</td>
@@ -80,12 +88,16 @@ Bot Commands
     <tr>
       <td>plugins.lua</td>
       <td>Plugin to manage other plugins. Enable, disable or reload.</td>
-      <td><code>!plugins </code>: list all plugins.<br><code>!plugins enable [plugin] </code>: enable plugin.<br><code>!plugins disable [plugin] </code>: disable plugin.<br><code>!plugins disable [plugin] chat </code>: disable plugin only this chat.<br><code>!plugins reload </code>: reloads all plugins.<br></td>
+      <td><code>!plugins </code>: list all plugins.<br>
+          <code>!plugins enable [plugin] </code>: enable plugin.<br>
+          <code>!plugins disable [plugin] </code>: disable plugin.<br>
+          <code>!plugins disable [plugin] chat </code>: disable plugin only this chat.<br>
+          <code>!plugins reload </code>: reloads all plugins.<br></td>
     </tr>
     <tr>
       <td>stats.lua</td>
       <td>Plugin to update user stats.</td>
-      <td><code>!stats </code>: Returns a list of Username [telegram_id]</code>: msg_num</td>
+      <td><code>!stats </code>: Returns a list of username message number</td>
     </tr>
     <tr>
       <td>version.lua</td>
@@ -98,7 +110,7 @@ Bot Commands
 [Installation](https</code>://github.com/yagop/telegram-bot/wiki/Installation)
 ------------
 ```bash
-# Tested on Debian 8, for other OSs check out https</code>://github.com/yagop/telegram-bot/wiki/Installation
+# Tested on Debian 8, for other OSs check out https://github.com/yagop/telegram-bot/wiki/Installation
 sudo apt update
 sudo apt upgrade
 sudo apt install libreadline-dev libconfig-dev libssl-dev lua5.2 liblua5.2-dev libevent-dev libjansson-dev libpython-dev make unzip git redis-server g++
@@ -107,7 +119,7 @@ sudo apt install libreadline-dev libconfig-dev libssl-dev lua5.2 liblua5.2-dev l
 ```bash
 # After those dependencies, lets install the bot
 cd $HOME
-git clone https</code>://github.com/rizaumami/merbot.git
+git clone https://github.com/rizaumami/merbot.git
 cd merbot
 ./launch.sh install
 ./launch.sh # Will ask you for a phone number & confirmation code.
@@ -115,10 +127,10 @@ cd merbot
 
 Enable more [`plugins`](https</code>://github.com/rizaumami/merbot/tree/master/plugins)
 -------------
-See the plugins list with <code>!plugins` command.
+See the plugins list with `!plugins` command.
 
-Enable a disabled plugin by <code>!plugins enable [name]`.
+Enable a disabled plugin by `!plugins enable [name]`.
 
-Disable an enabled plugin by <code>!plugins disable [name]`.
+Disable an enabled plugin by `!plugins disable [name]`.
 
 Those commands require a privileged user, privileged users are defined inside `data/config.lua` (generated by the bot), stop the bot and edit if necessary.

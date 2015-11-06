@@ -12,8 +12,13 @@ end
 local function run(msg, matches)
   local user = matches[2]
 
-  -- User submitted a user name
+  -- User submitted a name
   if matches[1] == "name" then
+    user = string.gsub(user," ","_")
+  end
+
+  -- User submitted a user name
+  if matches[1] == "username" then
     user = string.gsub(user," ","_")
   end
   
