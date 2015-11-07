@@ -1,3 +1,15 @@
+local function kick_by_reply_callback(extra, success, result)
+  if is_administrator(result.from.id) then
+    send_msg(extra, "You can't kick admin!", ok_cb, false)
+  else
+    local del = chat_del_user("chat#id"..result.to.id, "user#id"..result.from.id, ok_cb, false)
+    if del == false then
+      send_msg(extra, "Kicking failed.", ok_cb, false)
+      return
+    end
+  end
+end
+
 local function is_user_whitelisted(id)
   local hash = 'whitelist:user#id'..id
   local white = redis:get(hash) or false
@@ -211,7 +223,10 @@ local function run(msg, matches)
 
   if matches[1] == 'kick' then
     if msg.to.type == 'chat' then
-      if string.match(matches[2], '^%d+$') then
+      if msg.reply_id then
+        msgr = get_message(msg.reply_id, kick_by_reply_callback, get_receiver(msg))
+      --end
+      elseif string.match(matches[2], '^%d+$') then
         kick_user(matches[2], msg.to.id)
       else
         local member = string.gsub(matches[2], '@', '')
@@ -287,6 +302,7 @@ return {
   "!ban user <user_id> : Kick user from chat and kicks it if joins chat again",
   "!ban user <username> : Kick user from chat and kicks it if joins chat again",
   "!ban delete <user_id> : Unban user",
+  "!kick : Kick user from chat group by reply",
   "!kick <user_id> : Kick user from chat group by id",
   "!kick <username> : Kick user from chat group by username",
   },
@@ -307,6 +323,7 @@ return {
   "^!(ban) (delete) (.*)$",
   "^!(superban) (user) (.*)$",
   "^!(superban) (delete) (.*)$",
+  "^!(kick)$",
   "^!(kick) (.*)$",
   "^!(kickme)$",
   "^!!tgservice (.+)$",

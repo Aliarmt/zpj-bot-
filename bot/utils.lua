@@ -179,6 +179,17 @@ function is_admin(msg)
   return var
 end
 
+function is_administrator(user_id)
+  local var = true
+  local data = load_data(_config.moderation.data)
+  if data[tostring(admins)] then
+    if data['admins'][user_id] then
+      var = false
+    end
+  end
+  return var
+end
+
 -- user has moderator privileges
 function is_mod(msg)
   local var = false
