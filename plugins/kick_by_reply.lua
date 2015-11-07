@@ -17,13 +17,15 @@ local function get_message_callback(extra, success, result)
 end
 
 local function run(msg, matches)
-  if msg.text == "!kick" and msg.reply_id then
-    msgr = get_message(msg.reply_id,get_message_callback, get_receiver(msg))
+  if is_mod(msg) then
+    if msg.text == "!kick" and msg.reply_id then
+      msgr = get_message(msg.reply_id,get_message_callback, get_receiver(msg))
+    end
   end
 end
 
 return {
-  description = "Test reply.",
+  description = "Kick by Reply",
   usage = {
     "!kick"
   },
