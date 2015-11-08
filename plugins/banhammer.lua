@@ -165,11 +165,19 @@ end
 
 local function run(msg, matches)
   if matches[1] == 'kickme' then
-  	kick_user(msg.from.id, msg.to.id)
+    if msg.to.type ~= 'chat' then
+      return "This is not a chat group!"
+    elseif user == tostring(our_id) then
+      --[[ A robot must protect its own existence as long as such protection does
+      not conflict with the First or Second Laws. ]]--
+      return "I won't kick myself!"
+    elseif is_sudo(msg) then
+      return "I won't kick an admin!"
+    else
+      kick_user(msg.from.id, msg.to.id)
+    end
   end
-  if not is_mod(msg) then
-    return nil
-  end
+
   local receiver = get_receiver(msg)
   if matches[4] then
     get_cmd = matches[1]..' '..matches[2]..' '..matches[3]
@@ -183,7 +191,7 @@ local function run(msg, matches)
     local user_id = matches[3]
     local chat_id = msg.to.id
     if msg.to.type == 'chat' then
-      if if matches[2] == 'user' then
+      if matches[2] == 'user' then
         if string.match(matches[3], '^%d+$') then
           ban_user(user_id, chat_id)
           send_large_msg(receiver, 'User '..user_id..' banned!')
