@@ -35,7 +35,30 @@ local function get_description(msg, data)
   return 'About '..about
 end
 
+local function set_invite_callback(extra, success, result)
+--  send_msg(extra, result, ok_cb, false)
+--local function set_invite_link(msg, data)
+  if not is_mod(msg) then
+    return "For moderators only!"
+  end
+  local data = result
+  local data_cat = 'invite_link'
+	data[tostring(msg.to.id)][data_cat] = invitelink
+	save_data(_config.moderation.data, data)
+	return 'Set group invite_link to:\n'..invitelink
+end
+
+local function get_invite_link(msg, data)
+  local data_cat = 'invite_link'
+  if not data[tostring(msg.to.id)][data_cat] then
+		return 'No invite_link available.\nTry to set it first.'
+	end
+  local link = data[tostring(msg.to.id)][data_cat]
+  return link
+end
+
 local function set_rules(msg, data)
+  vardump(data)
   if not is_mod(msg) then
     return "For moderators only!"
   end
@@ -337,6 +360,16 @@ function run(msg, matches)
       end
     end
 
+    -- group link {get|revoke}
+    if matches[1] == 'group' and matches[2] == 'link' then
+      if matches[3] == 'get' then
+        return get_invite_link(msg, data)
+      end
+      if matches[3] == 'revoke' and is_mod(msg) then
+        msgr = export_chat_link(chat, export_chat_link_callback, get_receiver(msg))
+      end
+	  end
+
     -- group set {about|rules|name|photo}
     if matches[1] == 'group' and matches[2] == 'set' then
       if matches[3] == 'about' then
@@ -454,17 +487,18 @@ function run(msg, matches)
   end
 end
 
-
 return {
   description = "Plugin to manage group chat.",
   usage = {
     user = {
     "!group about : Read group description",
     "!group rules : Read group rules",
+    "!group link get : Get invite link",
     },
     moderator = {
     "!group create <group_name> : Create a new group (admin only)",
-    "!group set about <description> : Set group description",
+    "!group link set : Revoke invite link",
+    "!group create <group_name> : Create a new group (admin only)",
     "!group set rules <rules> : Set group rules",
     "!group set name <new_name> : Set group name",
     "!group set photo : Set group photo",
@@ -477,6 +511,8 @@ return {
   },
   patterns = {
   "^!(group) (create) (.*)$",
+  "^!(group) (link) (get)$",
+  "^!(group) (link) (set)$",
   "^!(group) (set) (about) (.*)$",
   "^!(group) (about)$",
   "^!(group) (set) (rules) (.*)$",

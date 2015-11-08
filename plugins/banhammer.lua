@@ -183,7 +183,7 @@ local function run(msg, matches)
     local user_id = matches[3]
     local chat_id = msg.to.id
     if msg.to.type == 'chat' then
-      if matches[2] == 'user' then
+      if if matches[2] == 'user' then
         if string.match(matches[3], '^%d+$') then
           ban_user(user_id, chat_id)
           send_large_msg(receiver, 'User '..user_id..' banned!')
@@ -225,7 +225,6 @@ local function run(msg, matches)
     if msg.to.type == 'chat' then
       if msg.reply_id then
         msgr = get_message(msg.reply_id, kick_by_reply_callback, get_receiver(msg))
-      --end
       elseif string.match(matches[2], '^%d+$') then
         kick_user(matches[2], msg.to.id)
       else
