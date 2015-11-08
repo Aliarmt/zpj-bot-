@@ -16,37 +16,39 @@ Bot Commands
     <tr>
       <td>banhammer.lua</td>
       <td>Plugin to manage bans, kicks and white/black lists.</td>
-      <td><code>!whitelist &lt;enable&gt;/&lt;disable&gt; </code>: Enable or disable whitelist mode<br>
-          <code>!whitelist user &lt;user_id&gt; </code>: Allow user to use the bot when whitelist mode is enabled<br>
-          <code>!whitelist user &lt;username&gt; </code>: Allow user to use the bot when whitelist mode is enabled<br>
+      <td><code>!whitelist &lt;enable&gt;/&lt;disable&gt;</code> : Enable or disable whitelist mode<br>
+          <code>!whitelist user &lt;user_id&gt;</code> : Allow user to use the bot when whitelist mode is enabled<br>
+          <code>!whitelist user &lt;username&gt;</code> : Allow user to use the bot when whitelist mode is enabled<br>
           <code>!whitelist chat </code>: Allow everybody on current chat to use the bot when whitelist mode is enabled<br>
-          <code>!whitelist delete user &lt;user_id&gt; </code>: Remove user from whitelist<br>
+          <code>!whitelist delete user &lt;user_id&gt;</code> : Remove user from whitelist<br>
           <code>!whitelist delete chat </code>: Remove chat from whitelist<br>
-          <code>!ban user &lt;user_id&gt; </code>: Kick user from chat and kicks it if joins chat again<br>
-          <code>!ban user &lt;username&gt; </code>: Kick user from chat and kicks it if joins chat again<br>
-          <code>!ban delete &lt;user_id&gt; </code>: Unban user<br>
-          <code>!kick &lt;user_id&gt; </code>: Kick user from chat group by id<br>
-          <code>!kick &lt;username&gt; </code>: Kick user from chat group by username<br>
-          <code>!superban user &lt;user_id&gt; </code>: Kick user from all chat and kicks it if joins again<br>
-          <code>!superban user &lt;username&gt; </code>: Kick user from all chat and kicks it if joins again<br>
-          <code>!superban delete &lt;user_id&gt; </code>: Unban user<br></td>
+          <code>!ban user &lt;user_id&gt;</code> : Kick user from chat and kicks it if joins chat again<br>
+          <code>!ban user &lt;username&gt;</code> : Kick user from chat and kicks it if joins chat again<br>
+          <code>!ban delete &lt;user_id&gt;</code> : Unban user<br>
+          <code>!kick</code>: Kick replied user<br>
+          <code>!kickme</code>: Bot kick user<br>
+          <code>!kick &lt;user_id&gt;</code> : Kick user from chat group by id<br>
+          <code>!kick &lt;username&gt;</code> : Kick user from chat group by username<br>
+          <code>!superban user &lt;user_id&gt;</code> : Kick user from all chat and kicks it if joins again<br>
+          <code>!superban user &lt;username&gt;</code> : Kick user from all chat and kicks it if joins again<br>
+          <code>!superban delete &lt;user_id&gt;</code> : Unban user<br></td>
     </tr>
     <tr>
       <td>channels.lua</td>
       <td>Plugin to manage channels.<br>
           Enable or disable channel.</td>
-      <td><code>!channel enable </code>: enable current channel<br>
-          <code>!channel disable </code>: disable current channel<br></td>
+      <td><code>!channel enable</code> : enable current channel<br>
+          <code>!channel disable</code> : disable current channel<br></td>
     </tr>
     <tr>
       <td>groupmanager.lua</td>
       <td>Plugin to manage group chat.</td>
-      <td><code>!group create &lt;group_name&gt; </code>: Create a new group (admin only)<br>
-          <code>!group set about &lt;description&gt; </code>: Set group description<br>
+      <td><code>!group create &lt;group_name&gt;</code> : Create a new group (admin only)<br>
+          <code>!group set about &lt;description&gt;</code> : Set group description<br>
           <code>!group about </code>: Read group description<br>
-          <code>!group set rules &lt;rules&gt; </code>: Set group rules<br>
+          <code>!group set rules &lt;rules&gt;</code> : Set group rules<br>
           <code>!group rules </code>: Read group rules<br>
-          <code>!group set name &lt;new_name&gt; </code>: Set group name<br>
+          <code>!group set name &lt;new_name&gt;</code> : Set group name<br>
           <code>!group set photo </code>: Set group photo<br>
           <code>!group &lt;lock|unlock&gt; name </code>: Lock/unlock group name<br>
           <code>!group &lt;lock|unlock&gt; photo </code>: Lock/unlock group photo<br>
@@ -77,13 +79,13 @@ Bot Commands
     <tr>
       <td>moderation.lua</td>
       <td>Moderation plugin.</td>
-      <td><code>!promote &lt;username&gt; </code>: Promote user as moderator<br>
-          <code>!demote &lt;username&gt; </code>: Demote user from moderator<br>
+      <td><code>!promote &lt;username&gt;</code> : Promote user as moderator<br>
+          <code>!demote &lt;username&gt;</code> : Demote user from moderator<br>
           <code>!modlist </code>: List of moderators<br>
           <code>!modadd </code>: Add group to moderation list<br>
           <code>!modrem </code>: Remove group from moderation list<br>
-          <code>!adminprom &lt;username&gt; </code>: Promote user as admin (must be done from a group)<br>
-          <code>!admindem &lt;username&gt; </code>: Demote user from admin (must be done from a group)<br></td>
+          <code>!adminprom &lt;username&gt;</code> : Promote user as admin (must be done from a group)<br>
+          <code>!admindem &lt;username&gt;</code> : Demote user from admin (must be done from a group)<br></td>
     </tr>
     <tr>
       <td>plugins.lua</td>

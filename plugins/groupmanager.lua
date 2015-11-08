@@ -35,30 +35,22 @@ local function get_description(msg, data)
   return 'About '..about
 end
 
-local function set_invite_callback(extra, success, result)
---  send_msg(extra, result, ok_cb, false)
---local function set_invite_link(msg, data)
-  if not is_mod(msg) then
-    return "For moderators only!"
+local function export_chat_link_callback(cb_extra, success, result)
+  local receiver = cb_extra.receiver
+  local data = cb_extra.data
+  local chat_id = cb_extra.chat_id
+  local group_name = cb_extra.group_name
+  if success == 0 then
+    return send_large_msg(receiver, "Can't generate invite link for this group")
   end
-  local data = result
-  local data_cat = 'invite_link'
-	data[tostring(msg.to.id)][data_cat] = invitelink
-	save_data(_config.moderation.data, data)
-	return 'Set group invite_link to:\n'..invitelink
-end
-
-local function get_invite_link(msg, data)
-  local data_cat = 'invite_link'
-  if not data[tostring(msg.to.id)][data_cat] then
-		return 'No invite_link available.\nTry to set it first.'
-	end
-  local link = data[tostring(msg.to.id)][data_cat]
-  return link
+  data[tostring(chat_id)]['link'] = result
+  save_data(_config.moderation.data, data)
+  return send_large_msg(receiver,'Newest generated invite link for '..group_name..' is:\n'..result)
 end
 
 local function set_rules(msg, data)
   vardump(data)
+  vardump(msg)
   if not is_mod(msg) then
     return "For moderators only!"
   end
@@ -363,10 +355,17 @@ function run(msg, matches)
     -- group link {get|revoke}
     if matches[1] == 'group' and matches[2] == 'link' then
       if matches[3] == 'get' then
-        return get_invite_link(msg, data)
+        if data[tostring(msg.to.id)]['link'] then
+          local link = data[tostring(msg.to.id)]['link']
+          return link
+        else
+          local chat = 'chat#id'..msg.to.id
+          msgr = export_chat_link('chat#id'..msg.to.id, export_chat_link_callback, {receiver=receiver, data=data, chat_id=msg.to.id})
+        end
       end
       if matches[3] == 'revoke' and is_mod(msg) then
-        msgr = export_chat_link(chat, export_chat_link_callback, get_receiver(msg))
+        local chat = 'chat#id'..msg.to.id
+        msgr = export_chat_link('chat#id'..msg.to.id, export_chat_link_callback, {receiver=receiver, data=data, chat_id=msg.to.id, group_name=msg.to.print_name})
       end
 	  end
 
@@ -405,7 +404,7 @@ function run(msg, matches)
       end
       if matches[3] == 'photo' then
         return lock_group_photo(msg, data)
-      end   
+      end
       if matches[3] == 'spam' then
         return lock_group_spam(msg, data)
       end
@@ -421,7 +420,7 @@ function run(msg, matches)
       end
       if matches[3] == 'photo' then
         return unlock_group_photo(msg, data)
-      end      
+      end
       if matches[3] == 'spam' then
         return unlock_group_spam(msg, data)
       end
@@ -497,7 +496,7 @@ return {
     },
     moderator = {
     "!group create <group_name> : Create a new group (admin only)",
-    "!group link set : Revoke invite link",
+    "!group link revoke : Revoke invite link",
     "!group create <group_name> : Create a new group (admin only)",
     "!group set rules <rules> : Set group rules",
     "!group set name <new_name> : Set group name",
@@ -512,7 +511,7 @@ return {
   patterns = {
   "^!(group) (create) (.*)$",
   "^!(group) (link) (get)$",
-  "^!(group) (link) (set)$",
+  "^!(group) (link) (revoke)$",
   "^!(group) (set) (about) (.*)$",
   "^!(group) (about)$",
   "^!(group) (set) (rules) (.*)$",

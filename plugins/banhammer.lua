@@ -302,6 +302,7 @@ return {
   "!ban user <username> : Kick user from chat and kicks it if joins chat again",
   "!ban delete <user_id> : Unban user",
   "!kick : Kick user from chat group by reply",
+  "!kickme : Bot kick users",
   "!kick <user_id> : Kick user from chat group by id",
   "!kick <username> : Kick user from chat group by username",
   },
