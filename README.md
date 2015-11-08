@@ -46,6 +46,8 @@ Bot Commands
       <td><code>!group create &lt;group_name&gt;</code> : Create a new group (admin only)<br>
           <code>!group set about &lt;description&gt;</code> : Set group description<br>
           <code>!group about </code>: Read group description<br>
+          <code>!group link get : Get invite link.<br>
+          <code>!group link revoke : Revoke (remove and replace by newly generated) invite link.<br>
           <code>!group set rules &lt;rules&gt;</code> : Set group rules<br>
           <code>!group rules </code>: Read group rules<br>
           <code>!group set name &lt;new_name&gt;</code> : Set group name<br>
