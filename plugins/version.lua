@@ -1,10 +1,10 @@
 do
 
 function run(msg, matches)
-  return 'Merbot '.. VERSION .. [[ 
-  Checkout -untuk diisi-
-  GNU GPL v2 license.
-  @si_kabayan for more info.]]
+  return 'critech security '.. VERSION .. [[ 
+  anti spammer and group manager robot-
+ by cri-technology team
+  @willaim_critech & @heisenberg_critech for more info.]]
 end
 
 return {
