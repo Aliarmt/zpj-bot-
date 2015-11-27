@@ -1,4 +1,6 @@
 local function kick_by_reply_callback(extra, success, result)
+  if is_administrator(result.from.id) then
+    send_msg(extra, ok_cb, false)
   else
     local del = chat_del_user("chat#id"..result.to.id, "user#id"..result.from.id, ok_cb, false)
     if del == false then
