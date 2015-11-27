@@ -187,7 +187,7 @@ local function run(msg, matches)
     get_cmd = matches[1]
   end
 
-  if matches[1] == 'ban' and is_admin(msg) then
+  if matches[1] == 'ban' and is_mod(msg) then
     local user_id = matches[3]
     local chat_id = msg.to.id
     if msg.to.type == 'chat' then
@@ -229,7 +229,7 @@ local function run(msg, matches)
     end
   end
 
-  if matches[1] == 'kick' and is_admin(msg) then
+  if matches[1] == 'kick' and is_mod(msg) then
     if msg.to.type == 'chat' then
       if msg.reply_id then
         msgr = get_message(msg.reply_id, kick_by_reply_callback, get_receiver(msg))
