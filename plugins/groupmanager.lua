@@ -354,7 +354,7 @@ function run(msg, matches)
 
     -- group link {get|revoke}
     if matches[1] == 'group' and matches[2] == 'link' then
-      if matches[3] == 'get' then
+      if matches[3] == 'get' and is_mod(msg) then
         if data[tostring(msg.to.id)]['link'] then
           local link = data[tostring(msg.to.id)]['link']
           return link
@@ -371,11 +371,11 @@ function run(msg, matches)
 
     -- group set {about|rules|name|photo}
     if matches[1] == 'group' and matches[2] == 'set' then
-      if matches[3] == 'about' then
+      if matches[3] == 'about' and is_mod(msg) then
         deskripsi = matches[4]
         return set_description(msg, data)
       end
-      if matches[3] == 'rules' then
+      if matches[3] == 'rules' and is_mod(msg) then
         rules = matches[4]
         return set_rules(msg, data)
       end
