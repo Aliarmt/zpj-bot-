@@ -3,7 +3,7 @@
 
 do
 
-local NUM_MSG_MAX = 5
+local NUM_MSG_MAX = 3
 local TIME_CHECK = 4 -- seconds
 
 local function user_print_name(user)
