@@ -25,7 +25,7 @@ local function pre_process(msg)
     local hash = 'user:'..user..':floodc'
     local msgs = tonumber(redis:get(hash) or 0)
     local text = 'User '..user..' is flooding'
-    if msgs > NUM_MSG_MAX and not is_sudo(msg) then
+    if msgs > NUM_MSG_MAX and not is_mod(msg) then
       local data = load_data(_config.moderation.data)
       local anti_flood_stat = data[tostring(chat)]['settings']['anti_flood']
       if anti_flood_stat == 'kick' then
@@ -49,7 +49,7 @@ end
 
 function run(msg, matches)
 
-  if not is_sudo(msg) then
+  if not is_admin(msg) then
     return "For moderators only!"
   end
 
