@@ -2,7 +2,7 @@
 -- check moderation plugin
 
 -- make sure to set with value that not higher than stats.lua
-local NUM_MSG_MAX = 4
+local NUM_MSG_MAX = 3
 local TIME_CHECK = 4 -- seconds
 
 local function create_group(msg)
